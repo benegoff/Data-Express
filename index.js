@@ -9,6 +9,13 @@ var route = require('./routes/routes.js')
 
 var app = express();
 
+var checkAuth = function (req, res, next) {
+    if (req.session.user && req.session.user.isAuthenticated) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+};
 
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
@@ -20,5 +27,7 @@ var urlencodedParser = bodyParser.urlencoded({
 })
 
 app.get('/', route.index);
+app.get('/login', route.login);
+app.get('/account/:id', checkAuth, route.account);
 
 app.listen(3000);
