@@ -27,6 +27,8 @@ var urlencodedParser = bodyParser.urlencoded({
 })
 
 app.get('/', route.index);
+app.get('/register', route.register);
+app.post('/register', route.registerUser);
 app.get('/login', route.login);
 app.get('/account/:id', checkAuth, route.account);
 
