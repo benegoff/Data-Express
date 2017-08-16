@@ -2,32 +2,32 @@ extends layout
 
 block content
 
-  form(id="registerForm", method="post", action="/registerUser")
+  form(id="registerForm", method="post", action="/register")
     label(for="username") Username:
     input(type="text" name="username" placeholder="Username")
     br
     label(for="password") Password:
-    input(type="password" name = "username" placeholder="Password")
+    input(type="password" name = "password" placeholder="Password")
     br
     label(for="Q1") What do you like more?
     select(name = "Q1")
-      option(value="Sushi") Sushi
-      option(value="Pizza") Pizza
-      option(value="Domination") World Domination
-      option(value="Book") A Good Book
+      option(value="1") Sushi
+      option(value="2") Pizza
+      option(value="3") World Domination
+      option(value="4") A Good Book
     br
     label(for="Q2") Who's the better cook?
     select(name = "Q2")
-      option(value="Ramsay") Gordon Ramsay
-      option(value="Child") Julia Child
-      option(value="Brown") Alton Brown
-      option(value="Flay") Bobby Flay
+      option(value="1") Gordon Ramsay
+      option(value="2") Julia Child
+      option(value="3") Alton Brown
+      option(value="4") Bobby Flay
     br
     label(for="Q3") Where would you like to live?
     select(name = "Q3")
-      option(value="Bahamas") The Bahamas
-      option(value="Iceland") Iceland
-      option(value="Australia") The Land Down Undah
-      option(value="Well") At The Bottom of a Well
+      option(value="1") The Bahamas
+      option(value="2") Iceland
+      option(value="3") The Land Down Undah
+      option(value="4") At The Bottom of a Well
     br
     input(type='submit', value='Register')

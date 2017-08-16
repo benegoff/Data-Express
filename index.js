@@ -1,5 +1,5 @@
 var express = require('express');
-var expressSession = require('express-sessions');
+var expressSession = require('express-session');
 var pug = require('pug');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -21,6 +21,7 @@ app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
 
 app.use(express.static(path.join(__dirname + '/public')));
+app.use(expressSession({secret: 'SupahSekret', saveUninitialized: true, resave: true}));
 
 var urlencodedParser = bodyParser.urlencoded({
   extended: true
@@ -28,7 +29,7 @@ var urlencodedParser = bodyParser.urlencoded({
 
 app.get('/', route.index);
 app.get('/register', route.register);
-app.post('/register', route.registerUser);
+app.post('/register', urlencodedParser, route.registerUser);
 app.get('/login', route.login);
 app.get('/account/:id', checkAuth, route.account);
 

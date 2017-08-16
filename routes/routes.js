@@ -37,12 +37,13 @@ exports.login = function (req, res) {
 };
 
 exports.account = function (req, res) {
+  console.log('USER ID: ' + req.params.id);
   User.findById(req.params.id, function (err, user) {
     res.render('account', {
-      title: 'Your Profile',
       user: user
     });
   });
+  
 };
 
 exports.register = function (req, res) {
@@ -52,6 +53,10 @@ exports.register = function (req, res) {
 };
 
 exports.registerUser = function (req, res) {
+  if(User.findOne({name: req.body.username}).length > 0){
+    console.log('Name already exists');
+    return res.redirect('/register');
+  }
   var user = new User({
     name: req.body.username,
     password: req.body.password,
@@ -65,5 +70,6 @@ exports.registerUser = function (req, res) {
     if (err) return console.error(err);
     console.log(req.body.name + ' added');
   });
+  req.session.user = { isAuthenticated: true, username: req.body.username};
   res.redirect('/account/' + user.id);
 };
