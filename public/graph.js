@@ -14,7 +14,6 @@ function generateGraph(graphData){
 
     canvas.height = 500;
     canvas.width = 500;
-    canvas.style.border = "thick solid #0000FF";
 
     var barMargin = 5;
     var height = canvas.height;
