@@ -5,12 +5,14 @@ var data = [
     [3, "Hey look at Me"]
 ];
 
-var possibleColors = [ '#D90000', '#FF2D00', '#FF8C00', '#2E0927']
+var possibleColors = ['#D90000', '#FF2D00', '#FF8C00', '#2E0927']
 
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+
 
 function generateGraph(graphData){
+    var canvas = document.createElement('Canvas');
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext("2d");
 
     canvas.height = 500;
     canvas.width = 500;
@@ -58,11 +60,6 @@ function generateGraph(graphData){
         ctx.fillStyle = "black";
         ctx.fillText(graphData[i][1], 0, i * (barMargin * 4));
         ctx.restore();
-        // ctx.translate( 0, canvas.height / 2 );
-        // // ctx.rotate(Math.PI / -4)
-        // // ctx.fillText(graphData[i][1], i * width / numOfBars + (width / numOfBars) / 2, height / i);
-        // ctx.fillText(graphData[i][1], i * width / numOfBars + (width / numOfBars) / 2, 0);
-        // ctx.restore();
     }
 }
 
@@ -77,4 +74,14 @@ function getRandomColor(){
 }
 
 
+generateGraph(data);
+generateGraph(data);
+generateGraph(data);
+generateGraph(data);
+generateGraph(data);
+generateGraph(data);
+generateGraph(data);
+generateGraph(data);
+generateGraph(data);
+generateGraph(data);
 generateGraph(data);
