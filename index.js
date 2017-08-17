@@ -3,7 +3,6 @@ var expressSession = require('express-session');
 var pug = require('pug');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var bcrypt = require('bcrypt-nodejs');
 var path = require('path');
 var route = require('./routes/routes.js')
 
@@ -31,6 +30,7 @@ app.get('/', route.index);
 app.get('/register', route.register);
 app.post('/register', urlencodedParser, route.registerUser);
 app.get('/login', route.login);
+app.post('/login/', urlencodedParser, route.loginUser);
 app.get('/account/:id', checkAuth, route.account);
 
 app.listen(3000);
