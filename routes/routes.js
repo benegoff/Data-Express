@@ -37,11 +37,13 @@ exports.login = function (req, res) {
   });
 };
 
-exports.loginUser = function(req, res){
-  var user = User.findOne({password: bcrypt.compare(req.body.password), name: req.body.username}, function(err, user){
-    if(user){
-    res.redirect('account/' + user.id);
-    }else{
+exports.loginUser = function (req, res) {
+  var user = User.findOne({
+    name: req.body.username
+  }, function (err, user) {
+    if (bcrypt.compare(req.body.password, user.pasword)) {
+      res.redirect('account/' + user.id);
+    } else {
       res.redirect('login');
     }
   });
@@ -54,17 +56,19 @@ exports.account = function (req, res) {
       user: user
     });
   });
-  
+
 };
 
 exports.register = function (req, res) {
   res.render('register', {
-      title: 'Register'
+    title: 'Register'
   });
 };
 
 exports.registerUser = function (req, res) {
-  if(User.findOne({name: req.body.username}).length > 0){
+  if (User.findOne({
+      name: req.body.username
+    }).length > 0) {
     console.log('Name already exists');
     return res.redirect('/register');
   }
@@ -81,6 +85,9 @@ exports.registerUser = function (req, res) {
     if (err) return console.error(err);
     console.log(req.body.name + ' added');
   });
-  req.session.user = { isAuthenticated: true, username: req.body.username};
+  req.session.user = {
+    isAuthenticated: true,
+    username: req.body.username
+  };
   res.redirect('/account/' + user.id);
 };
