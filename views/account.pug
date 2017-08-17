@@ -3,3 +3,33 @@ extends layout
 block content
 
   h2 Welcome, #{user.name}!
+
+  h3 Edit Your Info
+  form(id="editUserForm", method="post", action="/edit")
+    label(for="username") Username:
+      input(type="text" name="username" placeholder="Username" text='#{user.username}')
+      br
+      label(for="password") Password:
+      input(type="password" name = "password" placeholder="Password")
+    label(for="Q1") What do you like more?
+    select(name = "Q1" value='#{user.answers.answer1}')
+      option(value="1") Sushi
+      option(value="2") Pizza
+      option(value="3") World Domination
+      option(value="4") A Good Book
+    br
+    label(for="Q2") Who's the better cook?
+    select(name = "Q2" value='#{user.answers.answer2}')
+      option(value="1") Gordon Ramsay
+      option(value="2") Julia Child
+      option(value="3") Alton Brown
+      option(value="4") Bobby Flay
+    br
+    label(for="Q3" value='#{user.answers.answer3}') Where would you like to live?
+    select(name = "Q3")
+      option(value="1") The Bahamas
+      option(value="2") Iceland
+      option(value="3") The Land Down Undah
+      option(value="4") At The Bottom of a Well
+    br
+    input(type='submit', value='Update my answers!')

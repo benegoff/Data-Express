@@ -12,9 +12,9 @@ var userSchema = mongoose.Schema({
   name: String,
   password: String,
   answers: {
-    answer1: Number,
-    answer2: Number,
-    answer3: Number
+    answer1: String,
+    answer2: String,
+    answer3: String
   }
 });
 
@@ -53,23 +53,30 @@ exports.register = function (req, res) {
 };
 
 exports.registerUser = function (req, res) {
-  if(User.findOne({name: req.body.username}).length > 0){
-    console.log('Name already exists');
-    return res.redirect('/register');
-  }
-  var user = new User({
-    name: req.body.username,
-    password: req.body.password,
-    answers: {
-      answer1: req.body.Q1,
-      answer2: req.body.Q2,
-      answer3: req.body.Q3
+  User.findOne({name: req.body.username}, function(err, existingUser){
+    if(!existingUser){
+      var user = new User({
+      name: req.body.username,
+      password: req.body.password,
+      answers: {
+        answer1: req.body.Q1,
+        answer2: req.body.Q2,
+        answer3: req.body.Q3
+      }
+    });
+    user.save(function (err, person) {
+      if (err) return console.error(err);
+      console.log(req.body.name + ' added');
+    });
+    req.session.user = { isAuthenticated: true, username: req.body.username};
+    res.redirect('/account/' + user.id);
+    }else{
+      console.log('Name already exists');
+      return res.redirect('/register');
     }
   });
-  user.save(function (err, person) {
-    if (err) return console.error(err);
-    console.log(req.body.name + ' added');
-  });
-  req.session.user = { isAuthenticated: true, username: req.body.username};
-  res.redirect('/account/' + user.id);
 };
+
+exports.update = function(req, res {
+  
+})

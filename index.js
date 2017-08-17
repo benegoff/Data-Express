@@ -32,5 +32,6 @@ app.get('/register', route.register);
 app.post('/register', urlencodedParser, route.registerUser);
 app.get('/login', route.login);
 app.get('/account/:id', checkAuth, route.account);
+app.post('/edit', urlencodedParser, route.update)
 
 app.listen(3000);
