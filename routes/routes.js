@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt-nodejs');
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/data');
 
@@ -35,6 +36,16 @@ exports.login = function (req, res) {
     title: 'Login'
   });
 };
+
+exports.loginUser = function(req, res){
+  var user = User.findOne({password: bcrypt.compare(req.body.password), name: req.body.username}, function(err, user){
+    if(user){
+    res.redirect('account/' + user.id);
+    }else{
+      res.redirect('login');
+    }
+  });
+}
 
 exports.account = function (req, res) {
   console.log('USER ID: ' + req.params.id);
