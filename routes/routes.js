@@ -69,12 +69,12 @@ exports.account = function (req, res) {
       user: user
     });
   });
-  
+
 };
 
 exports.register = function (req, res) {
   res.render('register', {
-      title: 'Register'
+    title: 'Register'
   });
 };
 
@@ -115,6 +115,10 @@ exports.updateAnswers = function(req, res){
       console.log(user.name + ' answers updated');
     });
   });
+  req.session.user = {
+    isAuthenticated: true,
+    username: req.body.username
+  };
   res.redirect('/account/' + user.id);
 };
 
