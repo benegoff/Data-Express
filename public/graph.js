@@ -1,13 +1,31 @@
-var data = [
-    [4, "Yes"],
-    [2, "No"], 
-    [8, "Maybe"], 
-    [3, "Hey look at Me"]
-];
+var data =  
+    [
+        {
+            userQuestion: "Question Here",
+            userAnswers: [
+                [4, "Yes"],
+                [2, "No"], 
+                [8, "Maybe"], 
+                [3, "Hey look at Me"]
+            ]
+        }, 
+        {
+            userQuestion: "Another Question Here",
+            userAnswers: [
+                [10, "A"],
+                [7, "B"], 
+                [2, "C"], 
+                [5, "Hello World"]
+            ]
+        } 
+    ]
 
-var possibleColors = ['#D90000', '#FF2D00', '#FF8C00', '#2E0927']
 
+var possibleColors = ['#D90000', '#FF2D00', '#FF8C00', '#FF0900']
 
+function calculateUserData(){
+    console.log(user);
+}
 
 function generateGraph(graphData){
     var canvas = document.createElement('Canvas');
@@ -64,24 +82,24 @@ function generateGraph(graphData){
 }
 
 function getRandomColor(){
-    var color = '#';
-    var hexChars = ['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
+    var color = possibleColors[Math.floor(Math.random() * possibleColors.length)];
 
-    for(var i = 0; i < 6; i++){
-        color += hexChars[Math.floor(Math.random() * hexChars.length)];
-    }
-    return color;
+    var hexChars = ['1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+    var possibleChangeIndex = [1, 3, 5];
+
+    var hexIngection = hexChars[Math.floor(Math.random() * hexChars.length)];
+    hexIngection += hexChars[Math.floor(Math.random() * hexChars.length)];
+
+    var changeIndex = possibleChangeIndex[Math.floor(Math.random() * possibleChangeIndex.length)];
+
+    return color.substr(0, changeIndex) + hexIngection + color.substr(changeIndex + hexIngection.length);
 }
 
+// for(var i = 0; i < data.length; i++){
+//     var canvasLabel = document.createElement("H2");
+//     canvasLabel.innerHTML = data[i].userQuestion;
+//     document.body.appendChild(canvasLabel);
+//     generateGraph(data[i].userAnswers);
+// }
 
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
-generateGraph(data);
+calculateUserData();

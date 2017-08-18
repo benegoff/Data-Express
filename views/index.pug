@@ -5,5 +5,7 @@ block content
         h4 #{user.name}'s answers!
         each answer in user.answers
             p #{answer.answerText}
+    script(type='text/javascript').
+        var user = "#{users}";
     script(src='graph.js')
     
