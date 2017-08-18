@@ -1,6 +1,9 @@
 extends layout
 
 block content
+    each user in users
+        h4 #{user.name}'s answers!
+        each answer in user.answers
+            p #{answer.answerText}
     script(src='graph.js')
-
     

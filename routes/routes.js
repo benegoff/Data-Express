@@ -12,30 +12,31 @@ mdb.once('open', function (callback) {
 var userSchema = mongoose.Schema({
   name: String,
   password: String,
-  answers: {
-    answer1: {
+  answers: [
+    {
       questionText: String,
       answerText: String
     },
-    answer2: {
+    {
       questionText: String,
       answerText: String
     },
-    answer3: {
+    {
       questionText: String,
       answerText: String
     },
-  }
+  ],
+  role: String
 });
 
 var User = mongoose.model('User_Collection', userSchema);
 
 exports.index = function (req, res) {
-  User.find(function (err, user) {
+  User.find(function (err, users) {
     if (err) return console.error(err);
     res.render('index', {
       title: 'User Answers',
-      answers: user.answers
+      users: users
     });
   });
 };
@@ -94,20 +95,21 @@ exports.registerUser = function (req, res) {
         var user = new User({
           password: hash,
           name: req.body.username,
-          answers: {
-            answer1: {
+          answers: [
+            {
               questionText: "What do you like more?",
               answerText: req.body.Q1
             },
-            answer2: {
+            {
               questionText: "Who is the better cook?",
               answerText: req.body.Q2
             },
-            answer3: {
+            {
               questionText: "Where would you like to live?",
               answerText: req.body.Q3
             }
-          }
+          ],
+          role: 'user'
         });
         user.save(function (err, user) {
           if (err) return console.error(err);
