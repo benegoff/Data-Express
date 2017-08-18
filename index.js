@@ -20,7 +20,7 @@ app.set('view engine', 'pug');
 app.set('views', __dirname + '/views');
 
 app.use(express.static(path.join(__dirname + '/public')));
-app.use(expressSession({secret: 'SupahSekret', saveUninitialized: true, resave: true}));
+app.use(expressSession({secret: 'SupahSekret', saveUninitialized: true, resave: true, cookie:{maxAge:86400000}}));
 
 var urlencodedParser = bodyParser.urlencoded({
   extended: true

@@ -8,20 +8,20 @@ block content
   form(id="editUserAnswers", method="post", action="/editAnswers")
     input(type="hidden" name="id" value=user.id)
     label(for="Q1") What do you like more?
-    select(name = "Q1" value='#{user.answers.answer1}')
+    select(name = "Q1")
       option(value="1") Sushi
       option(value="2") Pizza
       option(value="3") World Domination
       option(value="4") A Good Book
     br
     label(for="Q2") Who's the better cook?
-    select(name = "Q2" value='#{user.answers.answer2}')
+    select(name = "Q2")
       option(value="1") Gordon Ramsay
       option(value="2") Julia Child
       option(value="3") Alton Brown
       option(value="4") Bobby Flay
     br
-    label(for="Q3" value='#{user.answers.answer3}') Where would you like to live?
+    label(for="Q3") Where would you like to live?
     select(name = "Q3")
       option(value="1") The Bahamas
       option(value="2") Iceland
@@ -33,13 +33,13 @@ block content
   h3 Change Password
   form(id="editUserPassword", method="post", action="/editPassword")
     input(type="hidden" name="id" value=user.id)  
-    label(for="oldPassword") New Password:
-    input(type="oldPassword" name = "password" placeholder="Password")
+    label(for="oldPassword") Old Password:
+    input(type="password" name = "oldPassword" placeholder="Password")
     br
     label(for="newPassword") New Password:
-    input(type="newPassword" name = "password" placeholder="Password")
+    input(type="password" name = "newPassword" placeholder="Password")
     br
     label(for="confirmPassword") Confirm Password:
-    input(type="confirmPassword" name = "passwordConfirm" placeholder="Confirm Password")
+    input(type="password" name = "confirmPassword" placeholder="Confirm Password")
     br
     input(type='submit', value='Update my password!')

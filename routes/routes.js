@@ -13,9 +13,18 @@ var userSchema = mongoose.Schema({
   name: String,
   password: String,
   answers: {
-    answer1: String,
-    answer2: String,
-    answer3: String
+    answer1: {
+      questionText: String,
+      answerText: String
+    },
+    answer2: {
+      questionText: String,
+      answerText: String
+    },
+    answer3: {
+      questionText: String,
+      answerText: String
+    },
   }
 });
 
@@ -37,28 +46,28 @@ exports.login = function (req, res) {
   });
 };
 
-exports.loginUser = function(req, res){
-  var user = User.findOne({name: req.body.username}, function(err, user){
-    if(user){
+exports.loginUser = function (req, res) {
+  var user = User.findOne({ name: req.body.username }, function (err, user) {
+    if (user) {
       console.log('Found User');
-      bcrypt.compare(req.body.password, user.password, function(err, result){
-        if(result){
+      bcrypt.compare(req.body.password, user.password, function (err, result) {
+        if (result) {
           console.log('Login successful');
-          req.session.user = { isAuthenticated: true, username: req.body.username};      
+          req.session.user = { isAuthenticated: true, username: req.body.username };
           res.redirect('account/' + user.id);
         }
-        else{
+        else {
           res.redirect('login');
         }
-      }); 
-    }else{
+      });
+    } else {
       res.redirect('login');
     }
   });
 }
 
-exports.logout = function(req, res){
-  req.session.destory();
+exports.logout = function (req, res) {
+  req.session.destroy();
   res.redirect('/');
 }
 
@@ -79,61 +88,84 @@ exports.register = function (req, res) {
 };
 
 exports.registerUser = function (req, res) {
-  User.findOne({name: req.body.username}, function(err, existingUser){
-    if(!existingUser){
-      bcrypt.hash(req.body.password, null, null, function(err, hash){
+  User.findOne({ name: req.body.username }, function (err, existingUser) {
+    if (!existingUser) {
+      bcrypt.hash(req.body.password, null, null, function (err, hash) {
         var user = new User({
           password: hash,
           name: req.body.username,
           answers: {
-            answer1: req.body.Q1,
-            answer2: req.body.Q2,
-            answer3: req.body.Q3
+            answer1: {
+              questionText: "What do you like more?",
+              answerText: req.body.Q1
+            },
+            answer2: {
+              questionText: "Who is the better cook?",
+              answerText: req.body.Q2
+            },
+            answer3: {
+              questionText: "Where would you like to live?",
+              answerText: req.body.Q3
+            }
           }
         });
         user.save(function (err, user) {
           if (err) return console.error(err);
           console.log(req.body.username + ' added');
         });
-        req.session.user = { isAuthenticated: true, username: req.body.username};
+        req.session.user = { isAuthenticated: true, username: req.body.username };
         res.redirect('/account/' + user.id);
       });
-    }else{
+    } else {
       console.log('Name already exists');
       return res.redirect('/register');
     }
   });
 };
 
-exports.updateAnswers = function(req, res){
-  User.findById(req.body.id, function(err, user) {
-    user.answers.answer1 = req.body.Q1;
-    user.answers.answer2 = req.body.Q2;
-    user.answers.answer3 = req.body.Q3;
-    user.save(function(err, user){
+exports.updateAnswers = function (req, res) {
+  User.findById(req.body.id, function (err, user) {
+    user.answers = {
+      answer1: {
+        questionText: "What do you like more?",
+        answerText: req.body.Q1
+      },
+      answer2: {
+        questionText: "Who is the better cook?",
+        answerText: req.body.Q2
+      },
+      answer3: {
+        questionText: "Where would you like to live?",
+        answerText: req.body.Q3
+      }
+    }
+    user.save(function (err, user) {
       if (err) return console.error(err);
       console.log(user.name + ' answers updated');
     });
+    res.redirect('/account/' + user.id);
   });
-  req.session.user = {
-    isAuthenticated: true,
-    username: req.body.username
-  };
-  res.redirect('/account/' + user.id);
 };
 
-exports.updatePassword = function(req, res){
-  User.findById(req.body.id, function(err, user) {
-    if(req.params.newPassword === req.params.confirmPassword){
-      bcrypt.compare(req.params.oldPassword, user.password, function(err, res){
-        bcrypt.hash(req.params.newPassword, null, null, function(errr, hash){
-          user.save(function(err, user){
-            if (err) return console.error(err);
-            console.log(user.name + ' password updated');
+exports.updatePassword = function (req, res) {
+  User.findById(req.body.id, function (err, user) {
+    if (req.body.newPassword === req.body.confirmPassword) {
+      bcrypt.compare(req.body.oldPassword, user.password, function (err, result) {
+        if (result) {
+          bcrypt.hash(req.body.newPassword, null, null, function (error, hash) {
+            user.password = hash;
+            user.save(function (err, user) {
+              if (err) return console.error(err);
+              console.log(user.name + ' password updated');
+              res.redirect('/account/' + user.id);
+            });
           });
-        });
+        } else {
+          res.redirect('/account/' + user.id);
+        }
       });
+    } else {
+      res.redirect('/account/' + user.id);
     }
   });
-  res.redirect('/account/' + user.id);
 };
