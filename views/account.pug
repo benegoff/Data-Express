@@ -5,12 +5,8 @@ block content
   h2 Welcome, #{user.name}!
 
   h3 Edit Your Info
-  form(id="editUserForm", method="post", action="/edit")
-    label(for="username") Username:
-      input(type="text" name="username" placeholder="Username" text='#{user.username}')
-      br
-      label(for="password") Password:
-      input(type="password" name = "password" placeholder="Password")
+  form(id="editUserAnswers", method="post", action="/editAnswers")
+    input(type="hidden" name="id" value=user.id)
     label(for="Q1") What do you like more?
     select(name = "Q1" value='#{user.answers.answer1}')
       option(value="1") Sushi
@@ -33,3 +29,17 @@ block content
       option(value="4") At The Bottom of a Well
     br
     input(type='submit', value='Update my answers!')
+  
+  h3 Change Password
+  form(id="editUserPassword", method="post", action="/editPassword")
+    input(type="hidden" name="id" value=user.id)  
+    label(for="oldPassword") New Password:
+    input(type="oldPassword" name = "password" placeholder="Password")
+    br
+    label(for="newPassword") New Password:
+    input(type="newPassword" name = "password" placeholder="Password")
+    br
+    label(for="confirmPassword") Confirm Password:
+    input(type="confirmPassword" name = "passwordConfirm" placeholder="Confirm Password")
+    br
+    input(type='submit', value='Update my password!')

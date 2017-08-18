@@ -38,13 +38,28 @@ exports.login = function (req, res) {
 };
 
 exports.loginUser = function(req, res){
-  var user = User.findOne({password: bcrypt.compare(req.body.password), name: req.body.username}, function(err, user){
+  var user = User.findOne({name: req.body.username}, function(err, user){
     if(user){
-    res.redirect('account/' + user.id);
+      console.log('Found User');
+      bcrypt.compare(req.body.password, user.password, function(err, result){
+        if(result){
+          console.log('Login successful');
+          req.session.user = { isAuthenticated: true, username: req.body.username};      
+          res.redirect('account/' + user.id);
+        }
+        else{
+          res.redirect('login');
+        }
+      }); 
     }else{
       res.redirect('login');
     }
   });
+}
+
+exports.logout = function(req, res){
+  req.session.destory();
+  res.redirect('/');
 }
 
 exports.account = function (req, res) {
@@ -66,21 +81,23 @@ exports.register = function (req, res) {
 exports.registerUser = function (req, res) {
   User.findOne({name: req.body.username}, function(err, existingUser){
     if(!existingUser){
-      var user = new User({
-      name: req.body.username,
-      password: req.body.password,
-      answers: {
-        answer1: req.body.Q1,
-        answer2: req.body.Q2,
-        answer3: req.body.Q3
-      }
-    });
-    user.save(function (err, person) {
-      if (err) return console.error(err);
-      console.log(req.body.name + ' added');
-    });
-    req.session.user = { isAuthenticated: true, username: req.body.username};
-    res.redirect('/account/' + user.id);
+      bcrypt.hash(req.body.password, null, null, function(err, hash){
+        var user = new User({
+          password: hash,
+          name: req.body.username,
+          answers: {
+            answer1: req.body.Q1,
+            answer2: req.body.Q2,
+            answer3: req.body.Q3
+          }
+        });
+        user.save(function (err, user) {
+          if (err) return console.error(err);
+          console.log(req.body.username + ' added');
+        });
+        req.session.user = { isAuthenticated: true, username: req.body.username};
+        res.redirect('/account/' + user.id);
+      });
     }else{
       console.log('Name already exists');
       return res.redirect('/register');
@@ -88,6 +105,31 @@ exports.registerUser = function (req, res) {
   });
 };
 
-exports.update = function(req, res {
-  
-})
+exports.updateAnswers = function(req, res){
+  User.findById(req.body.id, function(err, user) {
+    user.answers.answer1 = req.body.Q1;
+    user.answers.answer2 = req.body.Q2;
+    user.answers.answer3 = req.body.Q3;
+    user.save(function(err, user){
+      if (err) return console.error(err);
+      console.log(user.name + ' answers updated');
+    });
+  });
+  res.redirect('/account/' + user.id);
+};
+
+exports.updatePassword = function(req, res){
+  User.findById(req.body.id, function(err, user) {
+    if(req.params.newPassword === req.params.confirmPassword){
+      bcrypt.compare(req.params.oldPassword, user.password, function(err, res){
+        bcrypt.hash(req.params.newPassword, null, null, function(errr, hash){
+          user.save(function(err, user){
+            if (err) return console.error(err);
+            console.log(user.name + ' password updated');
+          });
+        });
+      });
+    }
+  });
+  res.redirect('/account/' + user.id);
+};

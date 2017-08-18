@@ -30,8 +30,10 @@ app.get('/', route.index);
 app.get('/register', route.register);
 app.post('/register', urlencodedParser, route.registerUser);
 app.get('/login', route.login);
-app.post('/login/', urlencodedParser, route.loginUser);
+app.post('/login', urlencodedParser, route.loginUser);
 app.get('/account/:id', checkAuth, route.account);
-app.post('/edit', urlencodedParser, route.update)
+app.post('/editAnswers', urlencodedParser, route.updateAnswers);
+app.post('/editPassword', urlencodedParser, route.updatePassword);
+app.get('/logout', checkAuth, route.logout);
 
 app.listen(3000);
