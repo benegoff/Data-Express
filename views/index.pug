@@ -1,6 +1,9 @@
 extends layout
 
 block content
+
+    h6 This page was last visited on #{lastVisited}
+
     each user in users
         h4 #{user.name}'s answers!
         each answer in user.answers
