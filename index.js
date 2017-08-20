@@ -43,6 +43,7 @@ app.post('/login', urlencodedParser, route.loginUser);
 app.get('/account/:id', checkAuth, route.account);
 app.post('/editAnswers', urlencodedParser, route.updateAnswers);
 app.post('/editPassword', urlencodedParser, route.updatePassword);
+app.post('/editInfo', urlencodedParser, route.updateInfo);
 app.get('/logout', checkAuth, route.logout);
 app.get('/admin', checkAdmin, route.admin);
 app.post('/upgradeUser', urlencodedParser, route.upgradeUser);

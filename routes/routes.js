@@ -12,6 +12,8 @@ mdb.once('open', function (callback) {
 var userSchema = mongoose.Schema({
   name: String,
   password: String,
+  email: String,
+  age: Number,
   answers: [
     {
       questionText: String,
@@ -127,6 +129,8 @@ exports.registerUser = function (req, res) {
         var user = new User({
           password: hash,
           name: req.body.username,
+          email: req.body.email,
+          age: req.body.age,
           answers: [
             {
               questionText: "What do you like more?",
@@ -201,5 +205,17 @@ exports.updatePassword = function (req, res) {
     } else {
       res.redirect('/account/' + user.id);
     }
+  });
+};
+
+exports.updateInfo = function (req, res) {
+  User.findById(req.body.id, function (err, user) {
+    user.email = req.body.newEmail;
+    user.age = req.body.newAge;
+    user.save(function (err, user) {
+      if (err) return console.error(err);
+      console.log(user.name + ' info updated');
+    });
+    res.redirect('/account/' + user.id);
   });
 };
