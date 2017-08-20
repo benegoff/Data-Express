@@ -22,7 +22,7 @@ var data =
 
 var userData = document.getElementById("data").value;
 var JSONData = JSON.parse(userData);
-var possibleColors = ['#D90000', '#FF2D00', '#FF8C00', '#F80900']
+var possibleColors = ['#D90000', '#FF2D00', '#FF8C00', '#80900']
 
 function calculateUserData(userData){
     var graphData = [

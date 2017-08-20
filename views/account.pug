@@ -4,6 +4,17 @@ block content
 
   h2 Welcome, #{user.name}!
 
+  h3 Change Personal Info
+  form(id="editUserInfo", method="post", action="/editInfo")
+    input(type="hidden" name="id" value=user.id)  
+    label(for="newEmail") Email:
+    input(type="text" name = "newEmail" placeholder="Email" value=user.email)
+    br
+    label(for="newAge") Age:
+    input(type="number" name = "newAge" value=user.age)
+    br
+    input(type='submit', value='Update my information!')
+
   h3 Edit Your Info
   form(id="editUserAnswers", method="post", action="/editAnswers")
     input(type="hidden" name="id" value=user.id)

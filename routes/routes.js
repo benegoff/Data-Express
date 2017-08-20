@@ -12,6 +12,8 @@ mdb.once('open', function (callback) {
 var userSchema = mongoose.Schema({
   name: String,
   password: String,
+  email: String,
+  age: Number,
   answers: [
     {
       questionText: String,
@@ -34,9 +36,11 @@ var User = mongoose.model('User_Collection', userSchema);
 exports.index = function (req, res) {
   User.find(function (err, users) {
     if (err) return console.error(err);
+    res.cookie('lastVisited', new Date().toUTCString());
     res.render('index', {
       title: 'User Answers',
-      users: users
+      users: users,
+      lastVisited: req.cookies.lastVisited
     });
   });
 };
@@ -47,6 +51,21 @@ exports.login = function (req, res) {
   });
 };
 
+exports.upgradeUser = function (req, res) {
+  console.log('User ID: ' + req.body.id)
+  var user = User.findById(req.body.id, function(err, user){
+    if(user){
+      console.log('Found User');
+      user.role = 'admin';
+      user.save(function (err, user) {
+        if (err) return console.error(err);
+        console.log(req.body.username + ' added');
+      });
+    }
+  });
+  res.redirect('admin');
+};
+
 exports.loginUser = function (req, res) {
   var user = User.findOne({ name: req.body.username }, function (err, user) {
     if (user) {
@@ -54,7 +73,12 @@ exports.loginUser = function (req, res) {
       bcrypt.compare(req.body.password, user.password, function (err, result) {
         if (result) {
           console.log('Login successful');
-          req.session.user = { isAuthenticated: true, username: req.body.username };
+          if(user.role === 'admin'){
+            req.session.user = { isAuthenticated: true, username: req.body.username, isAdmin: true };
+          }else{
+            req.session.user = { isAuthenticated: true, username: req.body.username, isAdmin: false };
+          }
+          
           res.redirect('account/' + user.id);
         }
         else {
@@ -88,6 +112,16 @@ exports.register = function (req, res) {
   });
 };
 
+exports.admin = function(req, res) {
+  User.find(function (err, users) {
+    if (err) return console.error(err);
+    res.render('admin', {
+      title: 'Admin Tools',
+      users: users
+    });
+  });
+}
+
 exports.registerUser = function (req, res) {
   User.findOne({ name: req.body.username }, function (err, existingUser) {
     if (!existingUser) {
@@ -95,6 +129,8 @@ exports.registerUser = function (req, res) {
         var user = new User({
           password: hash,
           name: req.body.username,
+          email: req.body.email,
+          age: req.body.age,
           answers: [
             {
               questionText: "What do you like more?",
@@ -169,5 +205,17 @@ exports.updatePassword = function (req, res) {
     } else {
       res.redirect('/account/' + user.id);
     }
+  });
+};
+
+exports.updateInfo = function (req, res) {
+  User.findById(req.body.id, function (err, user) {
+    user.email = req.body.newEmail;
+    user.age = req.body.newAge;
+    user.save(function (err, user) {
+      if (err) return console.error(err);
+      console.log(user.name + ' info updated');
+    });
+    res.redirect('/account/' + user.id);
   });
 };
