@@ -121,7 +121,7 @@ function generateGraph(graphData){
         ctx.fillStyle = possibleColors[i];	
         ctx.fillRect(-barMargin * 4, i * (barMargin * 4) - barMargin * 2, 12, 12);
         ctx.textAlign = "left";
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
         ctx.fillText(graphData[i][1], 0, i * (barMargin * 4));
         ctx.restore();
     }
@@ -153,6 +153,7 @@ var graphData = calculateUserData(JSONData);
 for(var i = 0; i < graphData.length; i++){
     var graphHeader = document.createElement("h2");
     graphHeader.innerHTML = graphData[i].questionText;
+    graphHeader.style.color = "white";
     document.body.appendChild(graphHeader);
     generateGraph(graphData[i].answers);    
 }

@@ -1,12 +1,12 @@
 extends layout
 
 block content
-
+  div(class="loginDiv")
     form(id="loginForm", method="post", action="/login")
-        label(for="username") Username:
-        input(type="text" name="username" placeholder="Username")
-        br
-        label(for="password") Password:
-        input(type="password" name = "password" placeholder="Password")
-        br
-        input(type='submit', value='Login')
+      label(for="username") Username:
+      input(type="text" name="username" placeholder="Username")
+      br
+      label(for="password") Password:
+      input(type="password" name = "password" placeholder="Password")
+      br
+      input(type='submit', value='Login')
