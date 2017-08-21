@@ -40,21 +40,27 @@ exports.index = function (req, res) {
     res.render('index', {
       title: 'User Answers',
       users: users,
-      lastVisited: req.cookies.lastVisited
+      lastVisited: req.cookies.lastVisited,
+      isLoggedIn: req.session.user ? req.session.user.isAuthenticated : false,
+      isAdmin: req.session.user ? req.session.user.isAdmin : false,
+      userId: req.session.user ? req.session.user.userId : 0
     });
   });
 };
 
 exports.login = function (req, res) {
   res.render('login', {
-    title: 'Login'
+    title: 'Log In',
+    isLoggedIn: req.session.user ? req.session.user.isAuthenticated : false,
+    isAdmin: req.session.user ? req.session.user.isAdmin : false,
+    userId: req.session.user ? req.session.user.userId : 0
   });
 };
 
 exports.upgradeUser = function (req, res) {
   console.log('User ID: ' + req.body.id)
-  var user = User.findById(req.body.id, function(err, user){
-    if(user){
+  var user = User.findById(req.body.id, function (err, user) {
+    if (user) {
       console.log('Found User');
       user.role = 'admin';
       user.save(function (err, user) {
@@ -67,21 +73,32 @@ exports.upgradeUser = function (req, res) {
 };
 
 exports.loginUser = function (req, res) {
-  var user = User.findOne({ name: req.body.username }, function (err, user) {
+  var user = User.findOne({
+    name: req.body.username
+  }, function (err, user) {
     if (user) {
       console.log('Found User');
       bcrypt.compare(req.body.password, user.password, function (err, result) {
         if (result) {
           console.log('Login successful');
-          if(user.role === 'admin'){
-            req.session.user = { isAuthenticated: true, username: req.body.username, isAdmin: true };
-          }else{
-            req.session.user = { isAuthenticated: true, username: req.body.username, isAdmin: false };
+          if (user.role === 'admin') {
+            req.session.user = {
+              isAuthenticated: true,
+              username: req.body.username,
+              isAdmin: true,
+              userId: user.id
+            };
+          } else {
+            req.session.user = {
+              isAuthenticated: true,
+              username: req.body.username,
+              isAdmin: false,
+              userId: user.id
+            };
           }
-          
+
           res.redirect('account/' + user.id);
-        }
-        else {
+        } else {
           res.redirect('login');
         }
       });
@@ -100,30 +117,41 @@ exports.account = function (req, res) {
   console.log('USER ID: ' + req.params.id);
   User.findById(req.params.id, function (err, user) {
     res.render('account', {
-      user: user
+      user: user,
+      title: "Account",
+      isLoggedIn: req.session.user ? req.session.user.isAuthenticated : false,
+      isAdmin: req.session.user ? req.session.user.isAdmin : false,
+      userId: req.session.user.userId
     });
   });
-
 };
 
 exports.register = function (req, res) {
   res.render('register', {
-    title: 'Register'
+    title: 'Register',
+    isLoggedIn: req.session.user ? req.session.user.isAuthenticated : false,
+    isAdmin: req.session.user ? req.session.user.isAdmin : false,
+    userId: req.session.user.userId
   });
 };
 
-exports.admin = function(req, res) {
+exports.admin = function (req, res) {
   User.find(function (err, users) {
     if (err) return console.error(err);
     res.render('admin', {
       title: 'Admin Tools',
-      users: users
+      users: users,
+      isLoggedIn: req.session.user ? req.session.user.isAuthenticated : false,
+      isAdmin: req.session.user ? req.session.user.isAdmin : false,
+      userId: req.session.user.userId
     });
   });
 }
 
 exports.registerUser = function (req, res) {
-  User.findOne({ name: req.body.username }, function (err, existingUser) {
+  User.findOne({
+    name: req.body.username
+  }, function (err, existingUser) {
     if (!existingUser) {
       bcrypt.hash(req.body.password, null, null, function (err, hash) {
         var user = new User({

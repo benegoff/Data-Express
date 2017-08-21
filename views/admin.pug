@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    table
+    table(id="usersTable")
         tr
             th User Id
             th User Name
@@ -10,7 +10,7 @@ block content
             if user.role === 'user'
                 form(id="registerForm", method="post", action="/upgradeUser")
                     td
-                        input(type="text" name="id" value=user.id readonly)
+                        input(class="userIdCol" type="text" name="id" value=user.id readonly)
                     td
                         input(type="text" name="username" value=user.name readonly)
                     td

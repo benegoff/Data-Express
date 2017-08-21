@@ -1,0 +1,81 @@
+body {
+  background-image: url("http://cdn.wallpapersafari.com/96/44/aVsTYP.jpg");
+  background-position: 50% 0;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  margin: 0;
+  color:white;
+}
+
+.loginDiv {
+  align-content: center;
+}
+
+#registerForm{
+  width: 50%;
+  height: 50%;
+  position: absolute;
+}
+
+#loginForm{
+  width: 200px;
+  height: 200px;
+  position: absolute;
+}
+
+#userForms{
+  width:50%;
+  height:75%;
+}
+
+#loginForm, #registerForm, #userForms{
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  padding: 45px;
+  background-color: #555;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 1.3em;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.75);
+}
+
+input {
+  margin: 15px;
+  height: 25px;
+}
+
+select {
+  margin: 15px;
+}
+
+canvas {
+  display: inline;
+  width: 50%;
+}
+
+#navBar {
+  background-color: #111;
+}
+
+a{
+  padding: 8px;
+  margin: 10px;
+  display: inline-block;
+  color:white;
+  text-decoration: none;
+  background-color: #222;
+  width:75px;
+}
+
+#usersTable{
+  margin: 25px;
+}
+
+.userIdCol{
+  border-style: none;
+  width: 250px;
+}

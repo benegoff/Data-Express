@@ -1,14 +1,8 @@
 extends layout
 
 block content
+  input(type='hidden' value=users id='data')
+  script(src='graph.js')
+  h6 This page was last visited on #{lastVisited}
 
-    h6 This page was last visited on #{lastVisited}
-
-    each user in users
-        h4 #{user.name}'s answers!
-        each answer in user.answers
-            p #{answer.answerText}
-    script(type='text/javascript').
-        var user = "#{users}";
-    script(src='graph.js')
     

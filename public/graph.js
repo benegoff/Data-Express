@@ -20,18 +20,64 @@ var data =
         } 
     ]
 
+var userData = document.getElementById("data").value;
+var JSONData = JSON.parse(userData);
+var possibleColors = ['#D90000', '#FF2D00', '#FF8C00', '#80900']
 
-var possibleColors = ['#D90000', '#FF2D00', '#FF8C00', '#FF0900']
+function calculateUserData(userData){
+    var graphData = [
+    {
+      questionText: "What do you like more?",
+      answers: [
+        [0, 'Sushi'],
+        [0, 'Pizza'],
+        [0, 'World Domination'],
+        [0, 'A Good Book']
+      ]
+    },
+    {
+      questionText: "Who is the better cook?",
+      answers: [
+        [0, 'Gordon Ramsay'],
+        [0, 'Julia Child'],
+        [0, 'Alton Brown'],
+        [0, 'Bobby Flay']
+      ]
+    },
+    {
+      questionText: "Where would you like to live?",
+      answers: [
+        [0, 'The Bahamas'],
+        [0, 'Iceland'],
+        [0, 'The Land Down Undah'],
+        [0, 'At The Bottom of a Well']
+      ]
+    }
+  ];
+  
+  userData.forEach(function(user) {
+    user.answers.forEach(function(userAnswer) {
+      graphData.forEach(function(question) {
+        if(userAnswer.questionText == question.questionText){
+          question.answers.forEach(function(answer) {
+            if(userAnswer.answerText == answer[1]){
+              answer[0] += 1;
+            }
+          }, this);
+        }
+      }, this);
+    }, this);
+  }, this);
 
-function calculateUserData(){
-    console.log(user);
+  return graphData;
 }
 
 function generateGraph(graphData){
+    console.log(graphData);
+    var graphHeader = document.createElement('H2');
     var canvas = document.createElement('Canvas');
     document.body.appendChild(canvas);
     var ctx = canvas.getContext("2d");
-
     canvas.height = 500;
     canvas.width = 500;
 
@@ -75,7 +121,7 @@ function generateGraph(graphData){
         ctx.fillStyle = possibleColors[i];	
         ctx.fillRect(-barMargin * 4, i * (barMargin * 4) - barMargin * 2, 12, 12);
         ctx.textAlign = "left";
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
         ctx.fillText(graphData[i][1], 0, i * (barMargin * 4));
         ctx.restore();
     }
@@ -102,4 +148,12 @@ function getRandomColor(){
 //     generateGraph(data[i].userAnswers);
 // }
 
-calculateUserData();
+var graphData = calculateUserData(JSONData);
+
+for(var i = 0; i < graphData.length; i++){
+    var graphHeader = document.createElement("h2");
+    graphHeader.innerHTML = graphData[i].questionText;
+    graphHeader.style.color = "white";
+    document.body.appendChild(graphHeader);
+    generateGraph(graphData[i].answers);    
+}
