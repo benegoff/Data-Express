@@ -7,6 +7,7 @@ block content
             th User Name
             th
         each user in users
+            tr
             if user.role === 'user'
                 form(id="registerForm", method="post", action="/upgradeUser")
                     td

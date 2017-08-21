@@ -53,8 +53,8 @@ select {
 }
 
 canvas {
-  display: inline;
-  width: 50%;
+  display: inline-block;
+  width: 30%;
 }
 
 #navBar {

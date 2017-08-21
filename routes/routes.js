@@ -121,7 +121,7 @@ exports.account = function (req, res) {
       title: "Account",
       isLoggedIn: req.session.user ? req.session.user.isAuthenticated : false,
       isAdmin: req.session.user ? req.session.user.isAdmin : false,
-      userId: req.session.user.userId
+      userId: req.session.user ? req.session.user.userId : 0
     });
   });
 };
@@ -131,7 +131,7 @@ exports.register = function (req, res) {
     title: 'Register',
     isLoggedIn: req.session.user ? req.session.user.isAuthenticated : false,
     isAdmin: req.session.user ? req.session.user.isAdmin : false,
-    userId: req.session.user.userId
+    userId: req.session.user ? req.session.user.userId : 0
   });
 };
 
@@ -143,7 +143,7 @@ exports.admin = function (req, res) {
       users: users,
       isLoggedIn: req.session.user ? req.session.user.isAuthenticated : false,
       isAdmin: req.session.user ? req.session.user.isAdmin : false,
-      userId: req.session.user.userId
+      userId: req.session.user ? req.session.user.userId : 0
     });
   });
 }
