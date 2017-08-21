@@ -150,9 +150,9 @@ exports.registerUser = function (req, res) {
         user.save(function (err, user) {
           if (err) return console.error(err);
           console.log(req.body.username + ' added');
+          req.session.user = { isAuthenticated: true, username: req.body.username };
+          res.redirect('/account/' + user.id);
         });
-        req.session.user = { isAuthenticated: true, username: req.body.username };
-        res.redirect('/account/' + user.id);
       });
     } else {
       console.log('Name already exists');
